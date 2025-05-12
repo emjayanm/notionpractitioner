@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Next Session Countdown</title>
+  <style>
+    body {
+      font-family: 'Playfair Display', serif;
+      background-color: #fefdf8;
+      color: #333;
+      padding: 20px;
+      text-align: center;
+      border: 2px solid #545454;
+      border-radius: 12px;
+      box-shadow: 0 0 12px #C1FF72;
+      max-width: 400px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    #countdown {
+      font-size: 1.3em;
+      color: #545454;
+    }
+  </style>
+</head>
+<body>
+  <h1>🕒 Next Session in:</h1>
+  <div id="countdown">Loading...</div>
+
+  <script>
+    // 🔮 Set your session date & time here:
+    const sessionDate = new Date("2025-05-15T15:00:00");
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = sessionDate - now;
+
+      if (diff <= 0) {
+        document.getElementById("countdown").innerHTML = "It's session time!";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+      document.getElementById("countdown").innerHTML =
+        `${days} Days, ${hours} Hours, ${minutes} Minutes`;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 60000); // update every minute
+  </script>
+</body>
+</html>
