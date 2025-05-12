@@ -1,60 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Next Session Countdown</title>
+  <meta charset="UTF-8" />
+  <title>Session Countdown</title>
   <style>
     body {
-      font-family: 'Playfair Display', serif;
-      background-color: #fefdf8;
-      color: #333;
+      font-family: Georgia, serif;
+      background-color: #ffffff;
+      color: #000000;
       padding: 20px;
-      text-align: center;
-      border: 2px solid #545454;
-      border-radius: 12px;
-      box-shadow: 0 0 12px #C1FF72;
       max-width: 400px;
       margin: auto;
+      border: 2px solid #000;
+      border-radius: 10px;
+      text-align: center;
     }
 
     h1 {
       font-size: 1.5em;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    input {
+      padding: 5px;
+      font-family: Georgia, serif;
+      font-size: 1em;
+      border: 1px solid #000;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 8px 12px;
+      font-size: 1em;
+      font-family: Georgia, serif;
+      border: 2px solid #000;
+      background: #fff;
+      cursor: pointer;
     }
 
     #countdown {
-      font-size: 1.3em;
-      color: #545454;
+      margin-top: 20px;
+      font-size: 1.2em;
     }
   </style>
 </head>
 <body>
-  <h1>🕒 Next Session in:</h1>
-  <div id="countdown">Loading...</div>
+  <h1>🕒 Next Session Countdown</h1>
+
+  <label for="date">Session Date</label>
+  <input type="date" id="date" />
+
+  <label for="time">Session Time</label>
+  <input type="time" id="time" />
+
+  <button onclick="startCountdown()">Start Countdown</button>
+
+  <div id="countdown">Enter session date and time above.</div>
 
   <script>
-    // 🔮 Set your session date & time here:
-    const sessionDate = new Date("2025-05-15T15:00:00");
+    let timer;
 
-    function updateCountdown() {
-      const now = new Date();
-      const diff = sessionDate - now;
+    function startCountdown() {
+      clearInterval(timer);
 
-      if (diff <= 0) {
-        document.getElementById("countdown").innerHTML = "It's session time!";
+      const dateInput = document.getElementById("date").value;
+      const timeInput = document.getElementById("time").value;
+
+      if (!dateInput || !timeInput) {
+        document.getElementById("countdown").innerText = "Please enter both date and time.";
         return;
       }
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const sessionDateTime = new Date(`${dateInput}T${timeInput}`);
+      if (isNaN(sessionDateTime)) {
+        document.getElementById("countdown").innerText = "Invalid date/time.";
+        return;
+      }
 
-      document.getElementById("countdown").innerHTML =
-        `${days} Days, ${hours} Hours, ${minutes} Minutes`;
+      function updateCountdown() {
+        const now = new Date();
+        const diff = sessionDateTime - now;
+
+        if (diff <= 0) {
+          document.getElementById("countdown").innerText = "It's session time!";
+          clearInterval(timer);
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+        document.getElementById("countdown").innerText =
+          `${days} Days, ${hours} Hours, ${minutes} Minutes`;
+      }
+
+      updateCountdown();
+      timer = setInterval(updateCountdown, 60000);
     }
-
-    updateCountdown();
-    setInterval(updateCountdown, 60000); // update every minute
   </script>
 </body>
 </html>
